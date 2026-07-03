@@ -1,0 +1,25 @@
+# --- Node / TypeScript ---
+node_modules
+*.js
+!jest.config.js
+*.d.ts
+*.tsbuildinfo
+
+# --- CDK ---
+.cdk.staging
+cdk.out
+cdk.out.*
+cdk.context.json
+
+# --- 計測の出力・ログ・一時ファイル ---
+measurements/
+*.log
+
+# --- ローカル限定のドキュメント（社内ブログ下書き）---
+blog.md
+
+# --- OS / エディタ ---
+.DS_Store
+*.swp
+.idea/
+.vscode/
