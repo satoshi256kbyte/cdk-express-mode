@@ -11,8 +11,8 @@ const app = new cdk.App();
 const prefix: string = app.node.tryGetContext('prefix') ?? 'dev';
 const githubOwner: string = app.node.tryGetContext('githubOwner');
 const githubRepo: string = app.node.tryGetContext('githubRepo');
-const normalBranch: string = app.node.tryGetContext('normalBranch') ?? 'normal';
-const expressBranch: string = app.node.tryGetContext('expressBranch') ?? 'express';
+const normalBranch: string = app.node.tryGetContext('normalBranch') ?? 'main';
+const expressBranch: string = app.node.tryGetContext('expressBranch') ?? 'develop';
 const connectionArn: string = app.node.tryGetContext('connectionArn') ?? '';
 
 const env: cdk.Environment = {

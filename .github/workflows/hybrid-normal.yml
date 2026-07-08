@@ -3,7 +3,7 @@ name: Deploy Normal (Hybrid)
 on:
   push:
     branches:
-      - normal
+      - main
 
 jobs:
   trigger:

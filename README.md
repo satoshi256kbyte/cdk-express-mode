@@ -112,7 +112,7 @@ npm install
 
 - AWS 認証情報が設定済みで、対象リージョン（既定 `ap-northeast-1`）が CDK bootstrap 済みであること。
 - このアカウントは **VPC Block Public Access がデフォルト有効**なため、インターネット通信が必要な
-  VPC には除外設定が必要（詳細は [CLAUDE.md](CLAUDE.md)）。本リポジトリのスタックは対応済み。
+  VPC には除外設定が必要（詳細は [AGENTS.md](AGENTS.md)）。本リポジトリのスタックは対応済み。
 
 ## ビルド・テスト（デプロイ不要・課金なし）
 
@@ -154,3 +154,32 @@ npm test        # Jest + cdk-nag（合成テンプレートの検証）
 計測後、2 つの結果ファイルを突き合わせて通常モードと Express モードを比較する。
 
 詳細な検証シナリオ・計測方法・ディレクトリ構成は [docs/product-overview.md](docs/product-overview.md) にまとめている。
+
+## CI/CD パイプライン
+
+Express Mode の効果を自動で継続的に比較するため、3 パターンの CI/CD パイプラインを用意。
+各パターンで `normal`/`express` ブランチを監視し、合計 6 デプロイが独立して動作する。
+
+デプロイ対象は SQS + DLQ のみの最小スタック（`bin/cicd-app.ts`）。
+
+| パターン | 方式 | スタック |
+|---|---|---|
+| GitHub Actions Only | Reusable workflow で CDK deploy 直接実行 | なし（YAML のみ） |
+| CodePipeline V2 Only | ブランチ別に 2 本のパイプライン | `dev-cicd-codepipeline-{normal,express}` |
+| Hybrid | GitHub Actions → S3 → CodePipeline V2（1本） | `dev-cicd-hybrid` |
+
+### CI/CD スタックのデプロイ
+
+```bash
+cd cicd
+npx cdk deploy --all
+```
+
+`cicd/cdk.json` の context を事前に設定する（`connectionArn` 等）。
+詳細は [AGENTS.md](AGENTS.md) を参照。
+
+### 前提条件（手動事前設定）
+
+- GitHub OIDC プロバイダー + IAM ロール → GitHub Secret `AWS_ROLE_ARN`
+- Hybrid 用 IAM ロール → GitHub Secret `AWS_ROLE_ARN_HYBRID`
+- CodeStar Connection → `cicd/cdk.json` の `connectionArn`

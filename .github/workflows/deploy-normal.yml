@@ -3,7 +3,7 @@ name: Deploy Normal (GitHub Actions Only)
 on:
   push:
     branches:
-      - normal
+      - main
 
 jobs:
   deploy:

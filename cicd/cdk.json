@@ -1,10 +1,10 @@
 {
   "app": "npx ts-node --prefer-ts-exts ../bin/cicd.ts",
   "context": {
-    "githubOwner": "OWNER",
+    "githubOwner": "satoshi256kbyte",
     "githubRepo": "cdk-express-mode",
     "normalBranch": "normal",
     "expressBranch": "express",
-    "connectionArn": ""
+    "connectionArn": "arn:aws:codeconnections:ap-northeast-1:202633084296:connection/d9d98b73-efcc-4ab3-a214-2d583d76b84c"
   }
 }

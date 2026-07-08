@@ -3,7 +3,7 @@ name: Deploy Express (GitHub Actions Only)
 on:
   push:
     branches:
-      - express
+      - develop
 
 jobs:
   deploy:
