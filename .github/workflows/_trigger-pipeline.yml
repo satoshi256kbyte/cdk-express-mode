@@ -15,12 +15,6 @@ on:
       AWS_ROLE_ARN:
         description: "OIDC IAM Role ARN for S3/CodePipeline access"
         required: true
-      HYBRID_SOURCE_BUCKET:
-        description: "S3 bucket name for source upload"
-        required: true
-      HYBRID_PIPELINE_NAME:
-        description: "CodePipeline name to trigger"
-        required: true
 
 permissions:
   id-token: write
@@ -45,12 +39,12 @@ jobs:
 
       - name: Upload source to S3
         run: |
-          aws s3 cp source.zip "s3://${{ secrets.HYBRID_SOURCE_BUCKET }}/source/latest.zip"
+          aws s3 cp source.zip "s3://${{ vars.HYBRID_SOURCE_BUCKET }}/source/latest.zip"
 
       - name: Start CodePipeline execution
         run: |
           aws codepipeline start-pipeline-execution \
-            --name "${{ secrets.HYBRID_PIPELINE_NAME }}" \
+            --name "${{ vars.HYBRID_PIPELINE_NAME }}" \
             --variables \
               name=branch,value=${GITHUB_REF_NAME} \
               name=commitSHA,value=${GITHUB_SHA} \

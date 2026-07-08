@@ -17,5 +17,3 @@ jobs:
       express: false
     secrets:
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
-      HYBRID_SOURCE_BUCKET: ${{ secrets.HYBRID_SOURCE_BUCKET }}
-      HYBRID_PIPELINE_NAME: ${{ secrets.HYBRID_PIPELINE_NAME }}
