@@ -96,24 +96,6 @@ export class HybridStack extends cdk.Stack {
         buildImage: codebuild.LinuxBuildImage.STANDARD_7_0,
         computeType: codebuild.ComputeType.SMALL,
       },
-      environmentVariables: {
-        BRANCH: {
-          type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
-          value: branchVar.reference(),
-        },
-        COMMIT_SHA: {
-          type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
-          value: commitShaVar.reference(),
-        },
-        PREFIX: {
-          type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
-          value: prefixVar.reference(),
-        },
-        EXPRESS: {
-          type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
-          value: expressVar.reference(),
-        },
-      },
       buildSpec: codebuild.BuildSpec.fromObject({
         version: '0.2',
         phases: {
@@ -162,6 +144,24 @@ export class HybridStack extends cdk.Stack {
               actionName: 'CDKDeploy',
               project: buildProject,
               input: sourceOutput,
+              environmentVariables: {
+                BRANCH: {
+                  type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+                  value: branchVar.reference(),
+                },
+                COMMIT_SHA: {
+                  type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+                  value: commitShaVar.reference(),
+                },
+                PREFIX: {
+                  type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+                  value: prefixVar.reference(),
+                },
+                EXPRESS: {
+                  type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+                  value: expressVar.reference(),
+                },
+              },
             }),
           ],
         },
