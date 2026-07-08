@@ -16,6 +16,6 @@ jobs:
       prefix: hy-express
       express: true
     secrets:
-      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN_HYBRID }}
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
       HYBRID_SOURCE_BUCKET: ${{ secrets.HYBRID_SOURCE_BUCKET }}
       HYBRID_PIPELINE_NAME: ${{ secrets.HYBRID_PIPELINE_NAME }}
