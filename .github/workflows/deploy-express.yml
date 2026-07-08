@@ -1,0 +1,15 @@
+name: Deploy Express (GitHub Actions Only)
+
+on:
+  push:
+    branches:
+      - express
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      prefix: ga-express
+      express: true
+    secrets:
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}

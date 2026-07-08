@@ -1,0 +1,60 @@
+name: _trigger-pipeline (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      prefix:
+        description: "CDK context prefix for deploy target (e.g. hy-normal)"
+        required: true
+        type: string
+      express:
+        description: "Enable CDK Express Mode (true/false)"
+        required: true
+        type: boolean
+      source-bucket:
+        description: "S3 bucket name for source upload"
+        required: true
+        type: string
+      pipeline-name:
+        description: "CodePipeline name to trigger"
+        required: true
+        type: string
+    secrets:
+      AWS_ROLE_ARN:
+        description: "OIDC IAM Role ARN for S3/CodePipeline access"
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ap-northeast-1
+
+      - name: Package source code
+        run: zip -r source.zip . -x '.git/*'
+
+      - name: Upload source to S3
+        run: |
+          aws s3 cp source.zip "s3://${{ inputs.source-bucket }}/source/latest.zip"
+
+      - name: Start CodePipeline execution
+        run: |
+          aws codepipeline start-pipeline-execution \
+            --name "${{ inputs.pipeline-name }}" \
+            --variables \
+              name=branch,value=${GITHUB_REF_NAME} \
+              name=commitSHA,value=${GITHUB_SHA} \
+              name=prefix,value=${{ inputs.prefix }} \
+              name=express,value=${{ inputs.express }}

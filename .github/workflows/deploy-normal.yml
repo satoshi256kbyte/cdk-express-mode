@@ -1,0 +1,15 @@
+name: Deploy Normal (GitHub Actions Only)
+
+on:
+  push:
+    branches:
+      - normal
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      prefix: ga-normal
+      express: false
+    secrets:
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}

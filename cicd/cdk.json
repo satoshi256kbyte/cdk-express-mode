@@ -1,0 +1,10 @@
+{
+  "app": "npx ts-node --prefer-ts-exts ../bin/cicd.ts",
+  "context": {
+    "githubOwner": "OWNER",
+    "githubRepo": "cdk-express-mode",
+    "normalBranch": "normal",
+    "expressBranch": "express",
+    "connectionArn": ""
+  }
+}

@@ -1,0 +1,53 @@
+name: _deploy (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      prefix:
+        description: "CDK context prefix (e.g. normal, express)"
+        required: true
+        type: string
+      express:
+        description: "Enable CDK Express Mode (--express flag)"
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      AWS_ROLE_ARN:
+        description: "OIDC IAM Role ARN for CDK deploy"
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ap-northeast-1
+
+      - name: CDK Synth
+        run: |
+          npx cdk synth --app "npx ts-node bin/cicd-app.ts" -c prefix=${{ inputs.prefix }} ${{ inputs.express && '--express' || '' }}
+
+      - name: CDK Deploy
+        run: |
+          npx cdk deploy --all --app "npx ts-node bin/cicd-app.ts" -c prefix=${{ inputs.prefix }} --require-approval never ${{ inputs.express && '--express' || '' }}

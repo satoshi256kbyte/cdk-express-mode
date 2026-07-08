@@ -1,0 +1,17 @@
+name: Deploy Express (Hybrid)
+
+on:
+  push:
+    branches:
+      - express
+
+jobs:
+  trigger:
+    uses: ./.github/workflows/_trigger-pipeline.yml
+    with:
+      prefix: hy-express
+      express: true
+      source-bucket: ${{ vars.HYBRID_SOURCE_BUCKET }}
+      pipeline-name: ${{ vars.HYBRID_PIPELINE_NAME }}
+    secrets:
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN_HYBRID }}
